@@ -1,0 +1,141 @@
+### Welcome message to check the database is set up
+GET http://localhost:8080/api/info
+
+#### USER ENDPOINTS #####
+
+### Updates an existing person
+PUT http://localhost:8080/api/users/jorg
+Content-Type: application/json
+
+{
+  "userName": "jorg",
+  "userEmail": "jorgemail",
+  "userPass": "jorg123",
+  "address": {
+    "id": 1,
+    "streetAddress": "Sankt Jacobsvej",
+    "cityInfo": {
+      "zipCode": 2750,
+      "cityName": "Ballerup"
+    }
+  }
+}
+
+### List of all users
+GET http://localhost:8080/api/users/all
+Content-Type: application/json
+
+### System greets the admin in this case, if he's logged in
+GET http://localhost:8080/api/info/admin
+x-access-token:eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGVzIjoiYWRtaW4iLCJleHAiOjE2NjcyOTYyMTAsImlhdCI6MTY2NzI5NDQxMCwiaXNzdWVyIjoic2VtZXN0ZXJzdGFydGNvZGUtZGF0MyIsInVzZXJuYW1lIjoiYWRtaW4ifQ.dlsMNiQc_OYU2HCa-WMzNImQ3qoNy2CGXEWAbXBQM3g"
+
+### Creates a new person
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "userName": "ole123",
+  "userEmail": "chris@gmail.com",
+  "userPass": "test123"
+}
+
+###
+DELETE http://localhost:8080/api/users/remove/jon/2
+Content-Type: application/json
+
+### Deletes an existing person
+DELETE http://localhost:8080/api/users/usertest
+Content-Type: application/json
+
+
+
+
+
+##### TRAINING SESSION ENDPOINT: #######
+
+### Delete Training session
+DELETE http://localhost:8080/api/training/3
+Content-Type: application/json
+
+### Create trainingsession
+POST http://localhost:8080/api/training
+Content-Type: application/json
+
+{
+  "title": "I created this through demo.http",
+  "time": "08:10",
+  "date": "2022-10-21",
+  "fullAddress": "Stabilvej 2",
+  "category": {
+    "id": 1
+  },
+  "maxParticipants": 15
+}
+
+### Update trainingsesssion
+PUT http://localhost:8080/api/training/update
+Content-Type: application/json
+
+{
+  "id": 1,
+  "title": "I updated this through demo.http",
+  "time": "08:10",
+  "date": "2022-10-21",
+  "fullAddress": "Stabilvej 2",
+  "category": {
+    "id": 2
+  },
+  "maxParticipants": 15
+}
+
+### Get by id
+GET http://localhost:8080/api/training/get/2
+Content-Type: application/json
+
+### Get all
+GET http://localhost:8080/api/users/remove/
+Content-Type: application/json
+
+### email api test
+POST http://localhost:8080/api/training/sendReminder
+Content-Type: application/json
+
+{
+    "id": 3,
+    "title": "test",
+    "time": "test",
+    "date": "test",
+    "fullAddress": "test",
+    "category": {
+      "id": 1,
+      "categoryName": "Dans",
+      "trainingSessions": []
+    },
+    "maxParticipants": 2,
+    "users": [
+      {
+        "userName": "oscar",
+        "userEmail": "oscartuff@live.dk",
+        "userPass": "$2a$10$92bIgiWKJJt6ZeGeVT.lPu4bVje2JtvQWB0x82Ri7G/nuGO7xKxWq",
+        "address": {
+          "id": 4,
+          "streetAddress": "test",
+          "cityInfo": {
+            "zipCode": 2800,
+            "cityName": "Kongens Lyngby"
+          }
+        },
+        "trainingSessions": [
+          "test",
+          "test",
+          "test",
+          "test",
+          "1",
+          "2"
+        ],
+        "roleList": [
+          "user"
+        ]
+      }
+    ]
+  }
