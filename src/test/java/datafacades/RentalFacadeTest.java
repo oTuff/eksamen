@@ -10,6 +10,7 @@ import javax.persistence.EntityManagerFactory;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -148,6 +149,13 @@ class RentalFacadeTest {
     }
 
     @Test
+    public void getRentalById() throws API_Exception{
+        Rental actual = facade.getRentalById(r1.getId());
+        Rental expected = r1;
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void getRentalsByTenant() throws API_Exception {
         List<Rental> actual = facade.getRentalsByTenant(t1.getId());
         System.out.println(t1);
@@ -204,6 +212,46 @@ class RentalFacadeTest {
         assertEquals(3, actualSize);
     }
 
+    @Test
+    public void updateRental() throws API_Exception {
+        Rental rental = r1;
+        rental.setRentalContactPerson("nykontaktperson");
+        Rental updatedRental = facade.updateRental(rental);
+        assertNotNull(rental.getId());
+        Rental actual = facade.getRentalById(r1.getId());
+        assertEquals("nykontaktperson", updatedRental.getRentalContactPerson());
+        assertEquals("nykontaktperson", actual.getRentalContactPerson());
+    }
+    @Test
+    public void updateRentalAndTenant() throws API_Exception {
+        Rental rental = r1;
+        Set<Tenant> tenants = new HashSet<>();
+        t2.setTenantJob("nytjob");
+        tenants.add(t2);
+        rental.setTenants(tenants);
+        Rental updatedRental = facade.updateRental(rental);
+        assertNotNull(rental.getId());
+        Rental actual = facade.getRentalById(r1.getId());
+        assertEquals(1, actual.getTenants().size());
+        assertEquals(t2,actual.getTenants().toArray()[0]);
+        assertEquals(true,actual.getTenants().contains(t2));
+        assertEquals(false,actual.getTenants().contains(t1));
+    }
+    @Test
+    public void updateRentalAndHouse() throws API_Exception {
+        Rental rental = r1;
+        House house = new House();
+        house.setAddress(a1);
+        house.setHouseNumberOfRooms(200);
+        rental.setHouseHouse(house);
+        facade.updateRental(rental);
+        Rental actual = facade.getRentalById(r1.getId());
+        assertNotNull(rental.getId());
+        int actualSize = facade.getAllRentals().size();
+        assertEquals(2, actualSize);
+        assertEquals(200, actual.getHouseHouse().getHouseNumberOfRooms());
+
+    }
     @Test
     public void deleteRental() throws API_Exception{
         facade.deleteRental(r1.getId());

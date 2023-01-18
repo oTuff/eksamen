@@ -8,6 +8,7 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.jupiter.api.AfterAll;
@@ -21,12 +22,13 @@ import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RentalResourceTest {
@@ -197,11 +199,24 @@ class RentalResourceTest {
 //        assertThat(rentalDTOList, containsInAnyOrder(rdto1));
     }
 
+
+    @Test
+    void getRentalById() {
+        given()
+                .contentType(ContentType.JSON)
+                .get("/rentals/" + r1.getId())
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK_200.getStatusCode())
+                .body("id", equalTo(r1.getId()))
+                .body("rentalDeposit", equalTo(100));
+    }
+
 //    @Test
 //    void getRentalsByTenant() {
 //        List<RentalDTO> rentalDTOS;
 //        rentalDTOS = given().contentType("application/json")
-//                .when().get("/rentals/" + t1.getId())
+//                .when().get("/rentals/tenant/" + t1.getId())
 //                .then().extract().body().jsonPath().getList("", RentalDTO.class);
 //
 //        assertThat(rentalDTOS, containsInAnyOrder(rdto1));
@@ -222,7 +237,32 @@ class RentalResourceTest {
                 .assertThat()
                 .statusCode(200)
                 .body("rentalDeposit", equalTo(100));
-//                .body("roleList", containsInAnyOrder("user"));
+    }
+
+    @Test
+    void updateRental() {
+        Rental rental = r1;
+        rental.setRentalContactPerson("nykontaktperson");
+        String requestBody = GSON.toJson(new RentalDTO(r1));
+        System.out.println(requestBody);
+        given().header("Content-type", ContentType.JSON)
+                .and().body(requestBody).when().put("/rentals")
+                .then().assertThat().statusCode(200)
+                .body("rentalContactPerson", equalTo("nykontaktperson"));
+    }
+//    @Test
+    public void updateRentalAndTenant(){
+        Rental rental = r1;
+        Set<Tenant> tenants = new HashSet<>();
+        tenants.add(t2);
+        rental.setTenants(tenants);
+        String requestBody = GSON.toJson(new RentalDTO(r1));
+        given().header("Content-type", ContentType.JSON)
+                .and().body(requestBody).when().put("/rentals")
+                .then().assertThat().statusCode(200)
+//                .body("tenants", equalTo("[{id="+t2.getId()+", tenantName=Alexander, tenantPhone=88888888, tenantJob=programmer}]"));
+
+                .body("tenants", contains(new RentalDTO.TenantDto(t2)));
     }
 
     @Test

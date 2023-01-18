@@ -41,6 +41,17 @@ public class RentalFacade {
         }
     }
 
+    public Rental getRentalById(Integer id) throws API_Exception {
+        EntityManager em = getEntityManager();
+        try {
+            Rental rental = em.find(Rental.class, id);
+            return rental;
+        } catch (Exception e) {
+            throw new API_Exception("Can't find a user with the username: " + id, 404, e);
+        }
+
+    }
+
     public List<House> getAllHouses() throws API_Exception {
         EntityManager em = getEntityManager();
         try {
@@ -100,7 +111,38 @@ public class RentalFacade {
 
 
     public Rental updateRental(Rental rental) throws API_Exception {
-        return null;
+        EntityManager em = getEntityManager();
+        House house = rental.getHouseHouse();
+        try {
+            em.getTransaction().begin();
+            //checks for Tenants
+            for (Tenant t : rental.getTenants()) {
+                if (t.getId() == null) {
+                    em.persist(t);
+                } else {
+                    em.merge(t);
+                }
+            }
+            //checks for address
+            if (house.getAddress().getId() == null) {
+                em.persist(house.getAddress());
+            } else {
+                em.merge(house.getAddress());
+            }
+            //checks for house
+            if (house.getId() == null) {
+                em.persist(house);
+            } else {
+                em.merge(house);
+            }
+            em.merge(rental);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            throw new API_Exception("error updating rental agreement" + rental);
+        } finally {
+            em.close();
+        }
+        return rental;
     }
 
     public Rental deleteRental(Integer id) throws API_Exception {

@@ -28,6 +28,10 @@ public class RentalDTOFacade {
         return RentalDTO.getRentalDTOs(rentalFacade.getAllRentals());
     }
 
+    public RentalDTO getRentalById(Integer id) throws API_Exception{
+        return new RentalDTO(rentalFacade.getRentalById(id));
+    }
+
     public HouseDTO getAllHouses() {
         return null;
     }
@@ -46,6 +50,10 @@ public class RentalDTOFacade {
 
     public RentalDTO deleteRental(Integer id) throws API_Exception {
         return new RentalDTO(rentalFacade.deleteRental(id));
+    }
+
+    public RentalDTO updateRental(RentalDTO rentalDTO) throws API_Exception{
+        return new RentalDTO(rentalFacade.updateRental(rentalDTO.getEntity()));
     }
 
 }

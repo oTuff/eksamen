@@ -27,9 +27,15 @@ public class RentalResource {
     public Response getAllTenats() throws API_Exception {
         return Response.ok().entity(GSON.toJson(rentalDTOFacade.getAllRentals())).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
     }
+    @GET
+    @Path("/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getRentalById(@PathParam("id") Integer id) throws API_Exception {
+        return Response.ok().entity(GSON.toJson(rentalDTOFacade.getRentalById(id))).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
+    }
 
     @GET
-    @Path("/{tenantId}")
+    @Path("/tenant/{tenantId}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getRentalsByTenatId(@PathParam("tenantId") Integer id) throws API_Exception {
         return Response.ok().entity(GSON.toJson(rentalDTOFacade.getRentalsByTenant(id))).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
@@ -43,15 +49,15 @@ public class RentalResource {
         RentalDTO newRentalDTO = rentalDTOFacade.createRental(rentalDTO);
         return Response.ok().entity(GSON.toJson(newRentalDTO)).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
     }
-//
-//    @PUT
-//    @Produces({MediaType.APPLICATION_JSON})
-//    @Consumes({MediaType.APPLICATION_JSON})
-//    public Response update(String content) throws API_Exception {
-//        BoatDTO boatDTO = GSON.fromJson(content, BoatDTO.class);
-//        BoatDTO updatedBoatDTO = rentalDTOFacade.updateBoat(boatDTO);
-//        return Response.ok().entity(GSON.toJson(updatedBoatDTO)).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
-//    }
+
+    @PUT
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response update(String content) throws API_Exception {
+        RentalDTO rentalDTO = GSON.fromJson(content, RentalDTO.class);
+        RentalDTO updateRentalDTO = rentalDTOFacade.updateRental(rentalDTO);
+        return Response.ok().entity(GSON.toJson(updateRentalDTO)).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
+    }
 
     @DELETE
     @Path("/{rentalId}")

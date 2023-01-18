@@ -11,7 +11,9 @@ import javax.persistence.EntityManagerFactory;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -135,6 +137,14 @@ class RentalDTOFacadeTest {
         assertEquals(expected, actual.size());
     }
 
+    @Test
+    void getRentalById() throws API_Exception{
+        RentalDTO actual = facade.getRentalById(r1.getId());
+        RentalDTO expected = rdto1;
+        System.out.println(actual);
+        System.out.println(expected);
+        assertEquals(expected, actual);
+    }
 
     @Test
     void getRentalsByTenat() throws API_Exception {
@@ -152,6 +162,31 @@ class RentalDTOFacadeTest {
         int actualSize = facade.getAllRentals().size();
         assertEquals(3, actualSize);
     }
+
+    @Test
+    public void updateRental() throws API_Exception {
+        Rental rental = r1;
+        rental.setRentalContactPerson("nykontaktperson");
+        RentalDTO updatedRentalDTO = facade.updateRental(new RentalDTO(rental));
+        assertNotNull(rental.getId());
+        RentalDTO actual = facade.getRentalById(r1.getId());
+        assertEquals("nykontaktperson", rental.getRentalContactPerson());
+        assertEquals("nykontaktperson", actual.getRentalContactPerson());
+    }
+    @Test
+    public void updateRentalAndTenant() throws API_Exception {
+        Rental rental = r1;
+        Set<Tenant> tenants = new HashSet<>();
+        tenants.add(t2);
+        rental.setTenants(tenants);
+        RentalDTO updatedRentalDTO = facade.updateRental(new RentalDTO(rental));
+        assertNotNull(rental.getId());
+        RentalDTO actual = facade.getRentalById(r1.getId());
+        assertEquals(new RentalDTO.TenantDto(t2), updatedRentalDTO.getTenants().toArray()[0]);
+        assertEquals(new RentalDTO.TenantDto(t2), actual.getTenants().toArray()[0]);
+        assertNotEquals(1,t1.getRentals().size());
+    }
+
 
     @Test
     public void deleteRental() throws API_Exception{

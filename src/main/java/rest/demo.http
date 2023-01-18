@@ -75,6 +75,45 @@ Content-Type: application/json
   ]
 }
 
+### upadet rental agreement
+PUT http://localhost:8080/eksamen_war_exploded/api/rentals
+Content-Type: application/json
+
+{
+  "id": 2,
+  "rentalStartDate": {
+    "year": 2022,
+    "month": 1,
+    "day": 1
+  },
+  "rentalEndDate": {
+    "year": 2024,
+    "month": 1,
+    "day": 2
+  },
+  "rentalPriceAnnual": 1000,
+  "rentalDeposit": 100,
+  "rentalContactPerson": "updated",
+  "houseHouse": {
+    "id": 2,
+    "houseNumberOfRooms": 100,
+    "address": {
+      "id": 1,
+      "streetAddress": "nyaddresse",
+      "cityInfo": {
+        "zipCode": 2800
+      }
+    }
+  },
+  "tenants": [
+    {
+      "tenantName": "nytentant",
+      "tenantPhone": 1234567800,
+      "tenantJob": "pro skater"
+    }
+  ]
+}
+
 
 
 
