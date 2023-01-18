@@ -243,11 +243,11 @@ public class RentalDTO implements Serializable {
         public TenantDto(Tenant t) {
             if (t.getId() > 0) {
                 this.id = t.getId();
+            }
                 this.tenantName = t.getTenantName();
                 this.tenantPhone = t.getTenantPhone();
                 this.tenantJob = t.getTenantJob();
             }
-        }
 
         public Integer getId() {
             return id;
