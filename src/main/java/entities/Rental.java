@@ -116,19 +116,24 @@ public class Rental {
         this.tenants = tenants;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Rental{" +
-//                "id=" + id +
-//                ", rentalStartDate=" + rentalStartDate +
-//                ", rentalEndDate=" + rentalEndDate +
-//                ", rentalPriceAnnual=" + rentalPriceAnnual +
-//                ", rentalDeposit=" + rentalDeposit +
-//                ", rentalContactPerson='" + rentalContactPerson + '\'' +
-//                ", houseHouse=" + houseHouse +
-//                ", tenants=" + tenants +
-//                '}';
-//    }
+    public void addTenant(Tenant tenant){
+        this.tenants.add(tenant);
+//        tenant.addRental(this);
+    }
+
+    @Override
+    public String toString() {
+        return "Rental{" +
+                "id=" + id +
+                ", rentalStartDate=" + rentalStartDate +
+                ", rentalEndDate=" + rentalEndDate +
+                ", rentalPriceAnnual=" + rentalPriceAnnual +
+                ", rentalDeposit=" + rentalDeposit +
+                ", rentalContactPerson='" + rentalContactPerson + '\'' +
+                ", houseHouse=" + houseHouse +
+                ", tenants=" + tenants +
+                '}';
+    }
 
     @Override
     public boolean equals(Object o) {

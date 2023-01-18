@@ -42,16 +42,16 @@ public class RentalDTO implements Serializable {
     }
 
     public RentalDTO(Rental rental) {
-        if(rental.getId() >0){
-            this.id=rental.getId();
+        if (rental.getId() != null) {
+            this.id = rental.getId();
         }
-        this.rentalStartDate =rental.getRentalStartDate();
+        this.rentalStartDate = rental.getRentalStartDate();
         this.rentalEndDate = rental.getRentalEndDate();
         this.rentalPriceAnnual = rental.getRentalPriceAnnual();
         this.rentalDeposit = rental.getRentalDeposit();
         this.rentalContactPerson = rental.getRentalContactPerson();
         this.houseHouse = new HouseDto(rental.getHouseHouse());
-        for(Tenant t : rental.getTenants()){
+        for (Tenant t : rental.getTenants()) {
             this.tenants.add(new TenantDto(t));
         }
     }
@@ -60,6 +60,24 @@ public class RentalDTO implements Serializable {
         List<RentalDTO> rentalDTOS = new ArrayList<>();
         rentals.forEach(rental -> rentalDTOS.add(new RentalDTO(rental)));
         return rentalDTOS;
+    }
+
+    public Rental getEntity() {
+        Rental rental = new Rental();
+        if (this.id != null) {
+            rental.setId(this.id);
+        }
+        rental.setId(this.id);
+        rental.setRentalStartDate(this.rentalStartDate);
+        rental.setRentalEndDate(this.rentalEndDate);
+        rental.setRentalPriceAnnual(this.rentalPriceAnnual);
+        rental.setRentalDeposit(this.rentalDeposit);
+        rental.setRentalContactPerson(this.rentalContactPerson);
+        rental.setHouseHouse(this.houseHouse.getEntity());
+        for (TenantDto tdto : this.tenants) {
+            rental.addTenant(tdto.getEntity());
+        }
+        return rental;
     }
 
     public Integer getId() {
@@ -127,6 +145,10 @@ public class RentalDTO implements Serializable {
                 "tenants = " + tenants + ")";
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     /**
      * A DTO for the {@link entities.House} entity
      */
@@ -144,10 +166,10 @@ public class RentalDTO implements Serializable {
         }
 
         public HouseDto(House house) {
-            if (house.getId()>0){
+            if (house.getId() > 0) {
                 this.id = house.getId();
-                this.houseNumberOfRooms=house.getHouseNumberOfRooms();
-                this.address= new AddressDTO(house.getAddress());
+                this.houseNumberOfRooms = house.getHouseNumberOfRooms();
+                this.address = new AddressDTO(house.getAddress());
             }
         }
 
@@ -185,6 +207,16 @@ public class RentalDTO implements Serializable {
                     "houseNumberOfRooms = " + houseNumberOfRooms + ", " +
                     "address = " + address + ")";
         }
+
+        public House getEntity() {
+            House house = new House();
+            if (this.id != null) {
+                house.setId(this.id);
+            }
+            house.setHouseNumberOfRooms(this.houseNumberOfRooms);
+            house.setAddress(this.address.getEntity());
+            return house;
+        }
     }
 
     /**
@@ -209,7 +241,7 @@ public class RentalDTO implements Serializable {
         }
 
         public TenantDto(Tenant t) {
-            if(t.getId()>0){
+            if (t.getId() > 0) {
                 this.id = t.getId();
                 this.tenantName = t.getTenantName();
                 this.tenantPhone = t.getTenantPhone();
@@ -256,6 +288,17 @@ public class RentalDTO implements Serializable {
                     "tenantName = " + tenantName + ", " +
                     "tenantPhone = " + tenantPhone + ", " +
                     "tenantJob = " + tenantJob + ")";
+        }
+
+        public Tenant getEntity() {
+            Tenant tenant = new Tenant();
+            if (this.id != null) {
+                tenant.setId(this.id);
+            }
+            tenant.setTenantName(this.tenantName);
+            tenant.setTenantPhone(this.tenantPhone);
+            tenant.setTenantJob(this.tenantJob);
+            return tenant;
         }
     }
 }

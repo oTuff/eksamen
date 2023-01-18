@@ -84,16 +84,16 @@ public class Tenant {
 //        rental.getTenants().add(this);
     }
 
-//    @Override
-//    public String toString() {
-//        return "Tenant{" +
-//                "id=" + id +
-//                ", tenantName='" + tenantName + '\'' +
-//                ", tenantPhone=" + tenantPhone +
-//                ", tenantJob='" + tenantJob + '\'' +
-//                ", rentals=" + rentals +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return "Tenant{" +
+                "id=" + id +
+                ", tenantName='" + tenantName + '\'' +
+                ", tenantPhone=" + tenantPhone +
+                ", tenantJob='" + tenantJob + '\'' +
+                ", rentals=" + rentals +
+                '}';
+    }
 
     @Override
     public boolean equals(Object o) {

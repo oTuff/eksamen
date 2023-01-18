@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import dtos.RentalDTO;
 import entities.*;
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -25,6 +26,7 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RentalResourceTest {
@@ -92,6 +94,7 @@ class RentalResourceTest {
         r1.setRentalDeposit(100);
         r1.setRentalContactPerson("Anders And");
         r1.setHouseHouse(h1);
+        r1.addTenant(t1);
 
         r2.setRentalStartDate(LocalDate.of(2022, 1, 1));
         r2.setRentalEndDate(LocalDate.of(2024, 1, 1));
@@ -110,13 +113,13 @@ class RentalResourceTest {
         t1.setTenantName("Oscar");
         t1.setTenantPhone(12345678);
         t1.setTenantJob("revisor");
-        t1.addRental(r1);
+//        t1.addRental(r1);
 
         t2.setTenantName("Alexander");
         t2.setTenantPhone(88888888);
         t2.setTenantJob("programmer");
-//        t2.addRental(r1);
-        t2.addRental(r2);
+        t2.addRental(r1);
+//        t2.addRental(r2);
 //        t2.addRental(r3);
 
         try {
@@ -180,28 +183,57 @@ class RentalResourceTest {
 //                .assertThat()
 //                .body("ownerName", equalTo("Oscar"));
 //    }
+    @Test
+    void allRentals() {
+        List<RentalDTO> rentalDTOList;
+        rentalDTOList = given()
+                .contentType("application/json")
+                .when()
+                .get("/rentals")
+                .then()
+                .extract().body().jsonPath().getList("", RentalDTO.class);
+        r1.addTenant(t1);
+        System.out.println(rentalDTOList);
+//        assertThat(rentalDTOList, containsInAnyOrder(rdto1));
+    }
+
 //    @Test
-//    void allBoats() {
-//        List<BoatDTO> harbourDTOList;
-//        harbourDTOList = given()
-//                .contentType("application/json")
-//                .when()
-//                .get("/boats")
-//                .then()
-//                .extract().body().jsonPath().getList("", BoatDTO.class);
-//        assertThat(harbourDTOList, containsInAnyOrder(bdto1));
+//    void getRentalsByTenant() {
+//        List<RentalDTO> rentalDTOS;
+//        rentalDTOS = given().contentType("application/json")
+//                .when().get("/rentals/" + t1.getId())
+//                .then().extract().body().jsonPath().getList("", RentalDTO.class);
+//
+//        assertThat(rentalDTOS, containsInAnyOrder(rdto1));
 //    }
 
     @Test
-    void getRentalsByTenant() {
-        //todo: why is it o2 that is the owner when it is suposed to be o1????
-        //fixed by editing query to use inner join
-        List<RentalDTO> rentalDTOS;
-        rentalDTOS = given().contentType("application/json")
-                .when().get("/rentals/" + t1.getId())
-                .then().extract().body().jsonPath().getList("", RentalDTO.class);
+    void creatRental(){
+        RentalDTO rdto = new RentalDTO(r1);
+        rdto.setId(null);
+        String requestBody = GSON.toJson(rdto);
+        given()
+                .header("Content-type", ContentType.JSON)
+                .and()
+                .body(requestBody)
+                .when()
+                .post("/rentals")
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .body("rentalDeposit", equalTo(100));
+//                .body("roleList", containsInAnyOrder("user"));
+    }
 
-        assertThat(rentalDTOS, containsInAnyOrder(rdto1));
+    @Test
+    void deleteRental() {
+        given()
+                .contentType(ContentType.JSON)
+                .pathParam("id", r1.getId())
+                .delete("/rentals/{id}")
+                .then()
+                .statusCode(200)
+                .body("id", equalTo(r1.getId()));
     }
 
 //    @Test

@@ -4,6 +4,7 @@ import businessfacades.RentalDTOFacade;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import datafacades.RentalFacade;
+import dtos.RentalDTO;
 import errorhandling.API_Exception;
 import utils.EMF_Creator;
 
@@ -18,30 +19,30 @@ public class RentalResource {
 
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private RentalDTOFacade rentalDTOFacade = RentalDTOFacade.getInstance(EMF);
-    private RentalFacade rentalFacade = RentalFacade.getInstance(EMF);
+//    private RentalFacade rentalFacade = RentalFacade.getInstance(EMF);
     private static final EntityManagerFactory EMF = EMF_Creator.createEntityManagerFactory();
 
-//    @GET
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public Response getAllBoats() throws API_Exception {
-//        return Response.ok().entity(GSON.toJson(rentalDTOFacade.getAllBoats())).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
-//    }
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getAllTenats() throws API_Exception {
+        return Response.ok().entity(GSON.toJson(rentalDTOFacade.getAllRentals())).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
+    }
 
     @GET
     @Path("/{tenantId}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response getOwnersByBoat(@PathParam("tenantId") Integer id) throws API_Exception {
+    public Response getRentalsByTenatId(@PathParam("tenantId") Integer id) throws API_Exception {
         return Response.ok().entity(GSON.toJson(rentalDTOFacade.getRentalsByTenant(id))).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
     }
 
-//    @POST
-//    @Produces({MediaType.APPLICATION_JSON})
-//    @Consumes({MediaType.APPLICATION_JSON})
-//    public Response create(String content) throws API_Exception {
-//        BoatDTO boatDTO = GSON.fromJson(content, BoatDTO.class);
-//        BoatDTO newBoatDTO = rentalDTOFacade.createBoat(boatDTO);
-//        return Response.ok().entity(GSON.toJson(newBoatDTO)).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
-//    }
+    @POST
+    @Produces({MediaType.APPLICATION_JSON})
+    @Consumes({MediaType.APPLICATION_JSON})
+    public Response create(String content) throws API_Exception {
+        RentalDTO rentalDTO= GSON.fromJson(content, RentalDTO.class);
+        RentalDTO newRentalDTO = rentalDTOFacade.createRental(rentalDTO);
+        return Response.ok().entity(GSON.toJson(newRentalDTO)).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
+    }
 //
 //    @PUT
 //    @Produces({MediaType.APPLICATION_JSON})
@@ -51,4 +52,11 @@ public class RentalResource {
 //        BoatDTO updatedBoatDTO = rentalDTOFacade.updateBoat(boatDTO);
 //        return Response.ok().entity(GSON.toJson(updatedBoatDTO)).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
 //    }
+
+    @DELETE
+    @Path("/{rentalId}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response deleteRental(@PathParam("rentalId") Integer id) throws API_Exception {
+        return Response.ok().entity(GSON.toJson(rentalDTOFacade.deleteRental(id))).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
+    }
 }

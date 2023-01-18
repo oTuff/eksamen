@@ -67,6 +67,8 @@ class RentalFacadeTest {
         r1.setRentalDeposit(100);
         r1.setRentalContactPerson("Anders And");
         r1.setHouseHouse(h1);
+        r1.addTenant(t1);
+//        r1.addTenant(t2);
 
         r2.setRentalStartDate(LocalDate.of(2022, 1, 1));
         r2.setRentalEndDate(LocalDate.of(2024, 1, 1));
@@ -74,6 +76,7 @@ class RentalFacadeTest {
         r2.setRentalDeposit(200);
         r2.setRentalContactPerson("Andersine");
         r2.setHouseHouse(h2);
+        r2.addTenant(t2);
 
         r3.setRentalStartDate(LocalDate.of(2023, 2, 1));
         r3.setRentalEndDate(LocalDate.of(2024, 2, 1));
@@ -85,13 +88,13 @@ class RentalFacadeTest {
         t1.setTenantName("Oscar");
         t1.setTenantPhone(12345678);
         t1.setTenantJob("revisor");
-        t1.addRental(r1);
+//        t1.addRental(r1);
 
         t2.setTenantName("Alexander");
         t2.setTenantPhone(88888888);
         t2.setTenantJob("programmer");
 //        t2.addRental(r1);
-        t2.addRental(r2);
+//        t2.addRental(r2);
 //        t2.addRental(r3);
 
         try {
@@ -109,13 +112,21 @@ class RentalFacadeTest {
             em.persist(a2);
             em.persist(h1);
             em.persist(h2);
+            em.persist(t1);
+            em.persist(t2);
+//            System.out.println(t1);
+//            System.out.println(t2);
+//            r1.addTenant(t2);
             em.persist(r1);
             em.persist(r2);
 //            em.persist(r3);
-            em.persist(t1);
-            em.persist(t2);
             em.getTransaction().commit();
         } finally {
+//            em.find(Tenant.class, t1.getId());
+//            em.find(Tenant.class, t2.getId());
+//            System.out.println(t1);
+//            System.out.println(t2);
+//            r1.addTenant(t2);
 //            em.find(Rental.class,r1.getId());
 //            em.find(Rental.class,r2.getId());
 ////            em.find(Tenant.class,t2.getId());
@@ -129,16 +140,17 @@ class RentalFacadeTest {
     @AfterEach
     public void tearDown() {
     }
+    @Test
+    public void getAllRentals() throws API_Exception{
+        List<Rental> actual = facade.getAllRentals();
+        int expected = 2;
+        assertEquals(expected,actual.size());
+    }
 
     @Test
     public void getRentalsByTenant() throws API_Exception {
-//        System.out.println(t1);
-//        System.out.println(t2);
-//        System.out.println(r1);
-//        System.out.println(r2);
-//        System.out.println(h1);
-//        System.out.println(h2);
         List<Rental> actual = facade.getRentalsByTenant(t1.getId());
+        System.out.println(t1);
         int expected = 1;
         assertEquals(expected, actual.size());
         assertEquals(true, actual.contains(r1));
@@ -154,6 +166,50 @@ class RentalFacadeTest {
 //        assertEquals(expected, actual.size());
 //    }
 
+
+    @Test
+    public void createRental() throws API_Exception {
+        Rental rental = r1;
+        rental.setId(null);
+        facade.createRental(rental);
+        assertNotNull(rental.getId());
+        int actualSize = facade.getAllRentals().size();
+        assertEquals(3, actualSize);
+    }
+
+    @Test
+    public void createRentalAndTenant() throws API_Exception {
+        Rental rental = r1;
+        rental.setId(null);
+        for (Tenant t : rental.getTenants()) {
+            t.setId(null);
+        }
+        facade.createRental(rental);
+        assertNotNull(rental.getId());
+        int actualSize = facade.getAllRentals().size();
+        assertEquals(3, actualSize);
+    }
+
+    @Test
+    public void createRentalAndHouse() throws API_Exception {
+        Rental rental = r1;
+        rental.setId(null);
+        House house = new House();
+        house.setAddress(a1);
+        house.setHouseNumberOfRooms(1);
+        rental.setHouseHouse(house);
+        facade.createRental(rental);
+        assertNotNull(rental.getId());
+        int actualSize = facade.getAllRentals().size();
+        assertEquals(3, actualSize);
+    }
+
+    @Test
+    public void deleteRental() throws API_Exception{
+        facade.deleteRental(r1.getId());
+        int actualSize = facade.getAllRentals().size();
+        assertEquals(1, actualSize);
+    }
 
 //    @Test
 //    public void getAllOwnersByBoat() throws API_Exception {
