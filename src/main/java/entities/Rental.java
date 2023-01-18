@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@NamedQuery(name = "Rental.deleteAllRows", query = "DELETE from Rental")
 @Table(name = "rental")
 public class Rental {
     @Id
@@ -114,6 +115,20 @@ public class Rental {
     public void setTenants(Set<Tenant> tenants) {
         this.tenants = tenants;
     }
+
+//    @Override
+//    public String toString() {
+//        return "Rental{" +
+//                "id=" + id +
+//                ", rentalStartDate=" + rentalStartDate +
+//                ", rentalEndDate=" + rentalEndDate +
+//                ", rentalPriceAnnual=" + rentalPriceAnnual +
+//                ", rentalDeposit=" + rentalDeposit +
+//                ", rentalContactPerson='" + rentalContactPerson + '\'' +
+//                ", houseHouse=" + houseHouse +
+//                ", tenants=" + tenants +
+//                '}';
+//    }
 
     @Override
     public boolean equals(Object o) {

@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@NamedQuery(name = "House.deleteAllRows", query = "DELETE from House")
 @Table(name = "house")
 public class House {
     @Id
@@ -59,6 +60,16 @@ public class House {
 
     public void setRentals(Set<Rental> rentals) {
         this.rentals = rentals;
+    }
+
+    @Override
+    public String toString() {
+        return "House{" +
+                "id=" + id +
+                ", houseNumberOfRooms=" + houseNumberOfRooms +
+                ", address=" + address +
+                ", rentals=" + rentals +
+                '}';
     }
 
     @Override

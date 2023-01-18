@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
+@NamedQuery(name = "Tenant.deleteAllRows", query = "DELETE from Tenant")
 @Table(name = "tenant")
 public class Tenant {
     @Id
@@ -77,6 +78,22 @@ public class Tenant {
     public void setRentals(Set<Rental> rentals) {
         this.rentals = rentals;
     }
+
+    public void addRental(Rental rental){
+        this.rentals.add(rental);
+//        rental.getTenants().add(this);
+    }
+
+//    @Override
+//    public String toString() {
+//        return "Tenant{" +
+//                "id=" + id +
+//                ", tenantName='" + tenantName + '\'' +
+//                ", tenantPhone=" + tenantPhone +
+//                ", tenantJob='" + tenantJob + '\'' +
+//                ", rentals=" + rentals +
+//                '}';
+//    }
 
     @Override
     public boolean equals(Object o) {
