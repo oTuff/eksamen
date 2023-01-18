@@ -39,6 +39,73 @@ Content-Type: application/json
   "userPass": "test123"
 }
 
+### Creates a new rental agreement
+POST http://localhost:8080/eksamen_war_exploded/api/rentals
+Content-Type: application/json
+
+{
+  "rentalStartDate": {
+    "year": 2022,
+    "month": 1,
+    "day": 1
+  },
+  "rentalEndDate": {
+    "year": 2024,
+    "month": 1,
+    "day": 2
+  },
+  "rentalPriceAnnual": 1000,
+  "rentalDeposit": 100,
+  "rentalContactPerson": "Oscar Tuff",
+  "houseHouse": {
+    "houseNumberOfRooms": 2,
+    "address": {
+      "streetAddress": "createtest",
+      "cityInfo": {
+        "zipCode": 2800
+      }
+    }
+  },
+  "tenants": [
+    {
+      "tenantName": "william",
+      "tenantPhone": 12345678,
+      "tenantJob": "kok"
+    }
+  ]
+}
+
+
+
+
+### Creates a new person
+POST http://localhost:8080/eksamen_war_exploded/api/rentals
+Content-Type: application/json
+
+{
+  "rentalStartDate": {
+    "year": 2022,
+    "month": 1,
+    "day": 1
+  },
+  "rentalEndDate": {
+    "year": 2024,
+    "month": 1,
+    "day": 2
+  },
+  "rentalPriceAnnual": 1000,
+  "rentalDeposit": 100,
+  "rentalContactPerson": "Oscar Tuff",
+  "houseHouse": {
+    "id": 1
+  },
+  "tenants": [
+    {
+      "id": 1
+    }
+  ]
+}
+
 ###
 DELETE http://localhost:8080/api/users/remove/jon/2
 Content-Type: application/json
@@ -101,41 +168,41 @@ POST http://localhost:8080/api/training/sendReminder
 Content-Type: application/json
 
 {
-    "id": 3,
-    "title": "test",
-    "time": "test",
-    "date": "test",
-    "fullAddress": "test",
-    "category": {
-      "id": 1,
-      "categoryName": "Dans",
-      "trainingSessions": []
-    },
-    "maxParticipants": 2,
-    "users": [
-      {
-        "userName": "oscar",
-        "userEmail": "oscartuff@live.dk",
-        "userPass": "$2a$10$92bIgiWKJJt6ZeGeVT.lPu4bVje2JtvQWB0x82Ri7G/nuGO7xKxWq",
-        "address": {
-          "id": 4,
-          "streetAddress": "test",
-          "cityInfo": {
-            "zipCode": 2800,
-            "cityName": "Kongens Lyngby"
-          }
-        },
-        "trainingSessions": [
-          "test",
-          "test",
-          "test",
-          "test",
-          "1",
-          "2"
-        ],
-        "roleList": [
-          "user"
-        ]
-      }
-    ]
-  }
+  "id": 3,
+  "title": "test",
+  "time": "test",
+  "date": "test",
+  "fullAddress": "test",
+  "category": {
+    "id": 1,
+    "categoryName": "Dans",
+    "trainingSessions": []
+  },
+  "maxParticipants": 2,
+  "users": [
+    {
+      "userName": "oscar",
+      "userEmail": "oscartuff@live.dk",
+      "userPass": "$2a$10$92bIgiWKJJt6ZeGeVT.lPu4bVje2JtvQWB0x82Ri7G/nuGO7xKxWq",
+      "address": {
+        "id": 4,
+        "streetAddress": "test",
+        "cityInfo": {
+          "zipCode": 2800,
+          "cityName": "Kongens Lyngby"
+        }
+      },
+      "trainingSessions": [
+        "test",
+        "test",
+        "test",
+        "test",
+        "1",
+        "2"
+      ],
+      "roleList": [
+        "user"
+      ]
+    }
+  ]
+}

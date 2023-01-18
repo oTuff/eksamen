@@ -52,7 +52,6 @@ public class RentalFacade {
     }
 
 
-
     public List<Rental> getRentalsByTenant(Integer tenantId) throws API_Exception {
         EntityManager em = getEntityManager();
         try {
@@ -69,6 +68,7 @@ public class RentalFacade {
         House house = rental.getHouseHouse();
         try {
             em.getTransaction().begin();
+            //checks for Tenants
             for (Tenant t : rental.getTenants()) {
                 if (t.getId() == null) {
                     em.persist(t);
@@ -76,6 +76,13 @@ public class RentalFacade {
                     em.find(Tenant.class, t.getId());
                 }
             }
+            //checks for address
+            if (house.getAddress().getId() == null) {
+                em.persist(house.getAddress());
+            } else {
+                em.find(Address.class, house.getAddress().getId());
+            }
+            //checks for house
             if (house.getId() == null) {
                 em.persist(house);
             } else {
@@ -96,7 +103,7 @@ public class RentalFacade {
         return null;
     }
 
-    public Rental deleteRental(Integer id) throws API_Exception{
+    public Rental deleteRental(Integer id) throws API_Exception {
         EntityManager em = getEntityManager();
         Rental rental = em.find(Rental.class, id);
 
@@ -106,7 +113,7 @@ public class RentalFacade {
             em.getTransaction().commit();
         } catch (Exception e) {
             if (rental == null) {
-                throw new API_Exception("no rental with that id",404,e);
+                throw new API_Exception("no rental with that id", 404, e);
             }
         } finally {
             em.close();
