@@ -97,8 +97,8 @@ class RentalDTOFacadeTest {
         try {
             em.getTransaction().begin();
             em.createNamedQuery("Tenant.deleteAllRows").executeUpdate();
-            em.createNamedQuery("Rental.deleteAllRows").executeUpdate();
             em.createNamedQuery("House.deleteAllRows").executeUpdate();
+            em.createNamedQuery("Rental.deleteAllRows").executeUpdate();
             em.createNamedQuery("User.deleteAllRows").executeUpdate();
             em.createNamedQuery("Role.deleteAllRows").executeUpdate();
             em.createNamedQuery("Address.deleteAllRows").executeUpdate();
