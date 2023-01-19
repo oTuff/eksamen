@@ -136,6 +136,7 @@ public class RentalFacade {
                 em.merge(house);
             }
             em.merge(rental);
+            System.out.println(rental);
             em.getTransaction().commit();
         } catch (Exception e) {
             throw new API_Exception("error updating rental agreement" + rental);
@@ -143,6 +144,40 @@ public class RentalFacade {
             em.close();
         }
         return rental;
+    }
+
+    public House updateHouse(House house) throws API_Exception {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            for (Rental r : house.getRentals()) {
+                for (Tenant t : r.getTenants()) {
+                    if (t.getId() == null) {
+                        em.persist(t);
+                    } else {
+                        em.merge(t);
+                    }
+                }
+                if (r.getId() == null) {
+                    em.persist(r);
+                } else {
+                    em.merge(r);
+                }
+            }
+            if (house.getAddress().getId() == null) {
+                em.persist(house.getAddress());
+            } else {
+                em.merge(house.getAddress());
+            }
+            em.persist(house);
+            em.getTransaction().commit();
+        } catch (
+                Exception e) {
+            throw new API_Exception("error updating house");
+        } finally {
+            em.close();
+        }
+        return house;
     }
 
     public Rental deleteRental(Integer id) throws API_Exception {

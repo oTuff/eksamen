@@ -50,6 +50,7 @@ public class HouseDTO implements Serializable {
         house.setHouseNumberOfRooms(this.houseNumberOfRooms);
         house.setAddress(this.address.getEntity());
         for(RentalDto rdto:this.rentals){
+            house.getRentals().add(rdto.getEntity());
         }
         return house;
     }

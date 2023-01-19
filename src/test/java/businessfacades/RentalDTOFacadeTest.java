@@ -1,5 +1,6 @@
 package businessfacades;
 
+import dtos.HouseDTO;
 import dtos.RentalDTO;
 import entities.*;
 import errorhandling.API_Exception;
@@ -128,6 +129,12 @@ class RentalDTOFacadeTest {
 
     @AfterEach
     public void tearDown() {
+    }
+     @Test
+    void getAllHouses() throws API_Exception{
+        List<HouseDTO> actual = facade.getAllHouses();
+        int expected = 2;
+        assertEquals(expected, actual.size());
     }
 
     @Test

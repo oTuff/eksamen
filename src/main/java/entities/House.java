@@ -61,6 +61,10 @@ public class House {
     public void setRentals(Set<Rental> rentals) {
         this.rentals = rentals;
     }
+    public void addRental(Rental rental){
+        this.rentals.add(rental);
+//        rental.setHouseHouse(this);
+    }
 
     @Override
     public String toString() {

@@ -28,6 +28,12 @@ public class RentalResource {
         return Response.ok().entity(GSON.toJson(rentalDTOFacade.getAllRentals())).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
     }
     @GET
+    @Path("/houses")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response getAllHouses() throws API_Exception {
+        return Response.ok().entity(GSON.toJson(rentalDTOFacade.getAllHouses())).type(MediaType.APPLICATION_JSON_TYPE.withCharset(StandardCharsets.UTF_8.name())).build();
+    }
+    @GET
     @Path("/{id}")
     @Produces({MediaType.APPLICATION_JSON})
     public Response getRentalById(@PathParam("id") Integer id) throws API_Exception {

@@ -80,7 +80,7 @@ PUT http://localhost:8080/eksamen_war_exploded/api/rentals
 Content-Type: application/json
 
 {
-  "id": 2,
+  "id": 18,
   "rentalStartDate": {
     "year": 2022,
     "month": 1,
@@ -95,11 +95,11 @@ Content-Type: application/json
   "rentalDeposit": 100,
   "rentalContactPerson": "updated",
   "houseHouse": {
-    "id": 2,
+    "id": 20,
     "houseNumberOfRooms": 100,
     "address": {
       "id": 1,
-      "streetAddress": "nyaddresse",
+      "streetAddress": "testvej",
       "cityInfo": {
         "zipCode": 2800
       }

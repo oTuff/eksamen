@@ -2,11 +2,14 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import dtos.HouseDTO;
 import dtos.RentalDTO;
 import entities.*;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.parsing.Parser;
+import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.grizzly.http.util.HttpStatus;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
@@ -72,7 +75,7 @@ class RentalResourceTest {
     @BeforeEach
     public void setUp() {
         EntityManager em = emf.createEntityManager();
-     t1 = new Tenant();
+        t1 = new Tenant();
         t2 = new Tenant();
         r1 = new Rental();
         r2 = new Rental();
@@ -104,6 +107,7 @@ class RentalResourceTest {
         r2.setRentalDeposit(200);
         r2.setRentalContactPerson("Andersine");
         r2.setHouseHouse(h2);
+        r2.addTenant(t2);
 
         r3.setRentalStartDate(LocalDate.of(2023, 2, 1));
         r3.setRentalEndDate(LocalDate.of(2024, 2, 1));
@@ -120,7 +124,7 @@ class RentalResourceTest {
         t2.setTenantName("Alexander");
         t2.setTenantPhone(88888888);
         t2.setTenantJob("programmer");
-        t2.addRental(r1);
+//        t2.addRental(r1);
 //        t2.addRental(r2);
 //        t2.addRental(r3);
 
@@ -152,39 +156,55 @@ class RentalResourceTest {
         }
     }
 
-//    @Test
-//    public void testServerIsUp() {
-//        System.out.println("Testing is server UP");
-//        given().when().get("/rentals").then().statusCode(200);
-//    }
-//
-//    @Test
-//    public void testLogRequest() {
-//        System.out.println("Testing logging request details");
-//        given().log().all()
-//                .when().get("/rentals")
-//                .then().statusCode(200);
-//    }
-//
-//    @Test
-//    public void testLogResponse() {
-//        System.out.println("Testing logging response details");
-//        given()
-//                .when().get("/rentals")
-//                .then().log().body().statusCode(200);
-//    }
+    @Test
+    public void testServerIsUp() {
+        System.out.println("Testing is server UP");
+        given().when().get("/rentals").then().statusCode(200);
+    }
 
-    //    @Test
-//    public void testPrintResponse() {
-//        Response response = given().when().get("/owners/" + odto1.getOwnerName());
-//        ResponseBody body = response.getBody();
-//        System.out.println(body.prettyPrint());
-//
-//        response
-//                .then()
-//                .assertThat()
-//                .body("ownerName", equalTo("Oscar"));
-//    }
+    @Test
+    public void testLogRequest() {
+        System.out.println("Testing logging request details");
+        given().log().all()
+                .when().get("/rentals")
+                .then().statusCode(200);
+    }
+
+    @Test
+    public void testLogResponse() {
+        System.out.println("Testing logging response details");
+        given()
+                .when().get("/rentals")
+                .then().log().body().statusCode(200);
+    }
+
+    @Test
+    public void testPrintResponse() {
+        Response response = given().when().get("/rentals/" + r1.getId());
+        ResponseBody body = response.getBody();
+        System.out.println(body.prettyPrint());
+
+        response
+                .then()
+                .assertThat()
+                .body("rentalDeposit", equalTo(100));
+    }
+
+    @Test
+    void allHouses() {
+        List<HouseDTO> houseDTOS;
+        houseDTOS = given()
+                .contentType("application/json")
+                .when()
+                .get("/rentals/houses")
+                .then()
+                .extract().body().jsonPath().getList("", HouseDTO.class);
+        r1.addTenant(t1);
+        System.out.println(houseDTOS);
+//        assertThat(houseDTOS, containsInAnyOrder(new HouseDTO(h1)));
+        assertEquals(2, houseDTOS.size());
+    }
+
     @Test
     void allRentals() {
         List<RentalDTO> rentalDTOList;
@@ -194,9 +214,11 @@ class RentalResourceTest {
                 .get("/rentals")
                 .then()
                 .extract().body().jsonPath().getList("", RentalDTO.class);
-        r1.addTenant(t1);
+//        r1.addTenant(t1);
         System.out.println(rentalDTOList);
 //        assertThat(rentalDTOList, containsInAnyOrder(rdto1));
+//        assertThat(rentalDTOList, containsInAnyOrder(new RentalDTO(r1)));
+        assertEquals(2, rentalDTOList.size());
     }
 
 
@@ -223,7 +245,7 @@ class RentalResourceTest {
 //    }
 
     @Test
-    void creatRental(){
+    void creatRental() {
         RentalDTO rdto = new RentalDTO(r1);
         rdto.setId(null);
         String requestBody = GSON.toJson(rdto);
@@ -250,8 +272,9 @@ class RentalResourceTest {
                 .then().assertThat().statusCode(200)
                 .body("rentalContactPerson", equalTo("nykontaktperson"));
     }
-//    @Test
-    public void updateRentalAndTenant(){
+
+    //    @Test
+    public void updateRentalAndTenant() {
         Rental rental = r1;
         Set<Tenant> tenants = new HashSet<>();
         tenants.add(t2);

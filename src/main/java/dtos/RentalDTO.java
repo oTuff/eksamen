@@ -158,6 +158,7 @@ public class RentalDTO implements Serializable {
         private Integer houseNumberOfRooms;
         @NotNull
         private AddressDTO address;
+//        private Set<RentalDTO> rentals = new LinkedHashSet<>();
 
         public HouseDto(Integer id, Integer houseNumberOfRooms, AddressDTO address) {
             this.id = id;
