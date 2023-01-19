@@ -166,12 +166,12 @@ public class RentalDTO implements Serializable {
         }
 
         public HouseDto(House house) {
-            if (house.getId() > 0) {
+            if (house.getId() !=0) {
                 this.id = house.getId();
+            }
                 this.houseNumberOfRooms = house.getHouseNumberOfRooms();
                 this.address = new AddressDTO(house.getAddress());
             }
-        }
 
         public Integer getId() {
             return id;
@@ -241,7 +241,7 @@ public class RentalDTO implements Serializable {
         }
 
         public TenantDto(Tenant t) {
-            if (t.getId() > 0) {
+            if (t.getId() !=0) {
                 this.id = t.getId();
             }
                 this.tenantName = t.getTenantName();

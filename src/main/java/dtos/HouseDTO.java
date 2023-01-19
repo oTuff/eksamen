@@ -8,9 +8,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A DTO for the {@link entities.House} entity
@@ -33,6 +31,17 @@ public class HouseDTO implements Serializable {
         this.rentals = rentals;
     }
 
+    public HouseDTO(House house) {
+        if (house.getId() !=0) {
+            this.id = house.getId();
+        }
+            this.houseNumberOfRooms = house.getHouseNumberOfRooms();
+            this.address = new AddressDTO(house.getAddress());
+            for(Rental r : house.getRentals()){
+                this.rentals.add(new RentalDto(r));
+        }
+    }
+
     public House getEntity() {
         House house = new House();
         if (this.id != null) {
@@ -43,6 +52,12 @@ public class HouseDTO implements Serializable {
         for(RentalDto rdto:this.rentals){
         }
         return house;
+    }
+
+    public static List<HouseDTO> getHouseDTOs(List<House> houses){
+        List<HouseDTO> houseDTOS = new ArrayList<>();
+        houses.forEach(house -> houseDTOS.add(new HouseDTO(house)));
+        return houseDTOS;
     }
 
     public Integer getId() {
@@ -270,7 +285,7 @@ public class HouseDTO implements Serializable {
             }
 
             public TenantDto(Tenant t) {
-                if (t.getId() > 0) {
+                if (t.getId() !=0) {
                     this.id = t.getId();
                 }
                     this.tenantName = t.getTenantName();

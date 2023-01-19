@@ -32,8 +32,8 @@ public class RentalDTOFacade {
         return new RentalDTO(rentalFacade.getRentalById(id));
     }
 
-    public HouseDTO getAllHouses() {
-        return null;
+    public List<HouseDTO> getAllHouses() throws API_Exception {
+        return HouseDTO.getHouseDTOs(rentalFacade.getAllHouses());
     }
 
     public TenatDTO getAllTenats(){
