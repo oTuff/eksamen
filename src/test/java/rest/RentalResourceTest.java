@@ -184,7 +184,6 @@ class RentalResourceTest {
         ResponseBody body = response.getBody();
         System.out.println(body.prettyPrint());
 
-
         response
                 .then()
                 .assertThat()
